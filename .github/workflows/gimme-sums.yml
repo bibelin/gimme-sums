@@ -1,0 +1,41 @@
+name: Gimme Sums
+on:
+  pull_request: {}
+permissions:
+  pull-requests: "write"
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - id: checkout
+        uses: actions/checkout@v4
+      - id: files
+        uses: Ana06/get-changed-files@v2.3.0
+      - id: main
+        name: Main
+        run: |
+          result=""
+          for changed_file in ${{ steps.files.outputs.added_modified }}; do
+            if [[ ${changed_file} == *".sh" ]]; then
+              source "${changed_file}"
+              for link in "${links[@]}"; do
+                wget -c "$link"
+                result="${result}  $(sha256sum ${link##*/})"
+              done
+            fi
+          done
+          [[ $result ]] || result="Empty result :thinking:"
+          echo "RESULT=${result}" >> $GITHUB_ENV
+      - id: github-script
+        uses: actions/github-script@v5
+        env:
+          BODY: ${{ env.RESULT }}
+        with:
+          script: |
+            const {BODY} = process.env
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: BODY.split(" ").join("\n")
+            })
