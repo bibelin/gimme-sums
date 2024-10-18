@@ -20,7 +20,7 @@ jobs:
               source "${changed_file}"
               for link in "${links[@]}"; do
                 wget -c "$link"
-                result="${result}  $(sha256sum ${link##*/})"
+                result="${result}  $(sha256sum ${link##*/}) ${changed_file}"
               done
             fi
           done
