@@ -19,8 +19,9 @@ jobs:
             if [[ ${changed_file} == *".sh" ]]; then
               source "${changed_file}"
               for link in "${links[@]}"; do
-                wget -c "$link"
-                result="${result}  $(sha256sum ${link##*/}) ${changed_file}"
+                wget "$link"
+                result="${result} ---- $(sha256sum ${link##*/}) ${changed_file} "
+                rm -f "${link##*/}"
               done
             fi
           done
