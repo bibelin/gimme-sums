@@ -1,4 +1,4 @@
-pkgver="0.159.1"
+pkgver="0.160.2"
 url="https://zed.dev"
 _channel="preview"
 links=(
