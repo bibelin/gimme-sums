@@ -1,4 +1,4 @@
-pkgver="0.3.13"
+pkgver="0.5.1"
 gives="ollama"
 links=(
   "https://github.com/${gives}/${gives}/releases/download/v${pkgver}/${gives}-linux-amd64.tgz"
